@@ -14,6 +14,7 @@ require_once './bootstrap/dependencies.php';
 AppFactory::setContainer($container);
 $app = AppFactory::create();
 
+$app->addBodyParsingMiddleware();
 $app->addMiddleware(new ExceptionMiddleware($container->get(LoggerInterface::class)));
 $app->addRoutingMiddleware();
 $app->addErrorMiddleware(true, false, false);

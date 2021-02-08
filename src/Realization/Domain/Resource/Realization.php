@@ -4,16 +4,11 @@ namespace App\Realization\Domain\Resource;
 
 final class Realization
 {
-    private string $id;
-    private string $userId;
-    private string $name;
-    private string $description;
-
     public function __construct(
-        string $id,
-        string $userId,
-        string $name,
-        string $description,
+        private string $id,
+        private string $userId,
+        private string $name,
+        private string $description,
     ) {
         $this->id = $id;
         $this->userId = $userId;

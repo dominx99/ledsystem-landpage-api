@@ -11,12 +11,10 @@ use Ramsey\Uuid\Uuid;
 
 final class RealizationController
 {
-    private CreateRealizationCommandHandler $createRealization;
-
-    public function __construct(CreateRealizationCommandHandler $createRealization)
-    {
-        $this->createRealization = $createRealization;
-    }
+    public function __construct (
+        private CreateRealizationCommandHandler $createRealization
+    )
+    {}
 
     public function store(ServerRequestInterface $request): ResponseInterface
     {

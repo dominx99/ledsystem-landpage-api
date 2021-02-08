@@ -20,7 +20,7 @@ services:
     volumes:
       - .:/application
       - ./docker/php/settings.ini:/usr/local/etc/php/conf.d/settings.ini
-      - ./docker/php/php-ini-overrides.ini:/etc/php/7.4/fpm/conf.d/99-overrides.ini
+      - ./docker/php/php-ini-overrides.ini:/etc/php/8.0/fpm/conf.d/99-overrides.ini
 
   nginx:
     container_name: ledsystem-nginx

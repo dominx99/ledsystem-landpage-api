@@ -11,20 +11,15 @@ use App\Account\Domain\Exception\UserNotFoundException;
 use App\Account\Domain\Repository\UserRepository;
 use App\Shared\Domain\Validation\ValidationException;
 use App\Shared\Http\Responses\JsonResponse;
-use App\Shared\Infrastructure\JWT\JWTEncoder;
+use App\Account\Service\JwtEncoder;
 
 final class LoginAction
 {
-    private Validator $validator;
-    private UserRepository $userRepository;
-
     public function __construct(
-        Validator $validator,
-        UserRepository $userRepository,
-    ) {
-        $this->validator = $validator;
-        $this->userRepository = $userRepository;
-    }
+        private Validator $validator,
+        private UserRepository $userRepository,
+    )
+    {}
 
     public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
@@ -49,7 +44,7 @@ final class LoginAction
             throw new AuthorizationException();
         }
 
-        $accessToken = (string) JWTEncoder::fromUser($user);
+        $accessToken = (string) JwtEncoder::fromUser($user);
 
         $user->setAccessToken($accessToken);
         $this->userRepository->update($user);

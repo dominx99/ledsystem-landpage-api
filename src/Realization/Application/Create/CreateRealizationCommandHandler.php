@@ -7,12 +7,10 @@ use App\Realization\Domain\Resource\Realization;
 
 final class CreateRealizationCommandHandler
 {
-    private RealizationRepository $realizations;
-
-    public function __construct(RealizationRepository $realizations)
-    {
-        $this->realizations = $realizations;
-    }
+    public function __construct (
+        private RealizationRepository $realizations,
+    )
+    {}
 
     public function handle(CreateRealizationCommand $command): void
     {

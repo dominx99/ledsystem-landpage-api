@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace App\Shared\Infrastructure\JWT;
+namespace App\Account\Service;
 
 use App\Account\Domain\Resource\User;
 use Firebase\JWT\JWT;
 
-final class JWTEncoder extends JWT
+final class JwtEncoder extends JWT
 {
     public static function fromUser(User $user): string
     {

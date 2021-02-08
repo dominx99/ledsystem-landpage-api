@@ -27,10 +27,12 @@ final class RealizationRepositoryDbal implements RealizationRepository
                 "name"        => ":name",
                 "description" => ":description",
             ])
-            ->setParameter("id", $realization->getId())
-            ->setParameter("userId", $realization->getUserId())
-            ->setParameter("name", $realization->getName())
-            ->setParameter("description", $realization->getDescription())
+            ->setParameters([
+                "id"          => $realization->getId(),
+                "userId"      => $realization->getUserId(),
+                "name"        => $realization->getName(),
+                "description" => $realization->getDescription(),
+            ])
             ->execute();
     }
 }
