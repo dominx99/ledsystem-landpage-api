@@ -15,6 +15,17 @@ final class RealizationRepositoryDbal implements RealizationRepository
         $this->connection = $connection;
     }
 
+    public function findAll(): array
+    {
+        return $this
+            ->connection
+            ->createQueryBuilder()
+            ->select("*")
+            ->from('realizations', 'r')
+            ->execute()
+            ->fetchAllAssociative();
+    }
+
     public function add(Realization $realization): void
     {
         $this
@@ -25,13 +36,43 @@ final class RealizationRepositoryDbal implements RealizationRepository
                 "id"          => ":id",
                 "userId"      => ":userId",
                 "name"        => ":name",
+                "slug"        => ":slug",
                 "description" => ":description",
             ])
             ->setParameters([
                 "id"          => $realization->getId(),
                 "userId"      => $realization->getUserId(),
                 "name"        => $realization->getName(),
+                "slug"        => $realization->getSlug(),
                 "description" => $realization->getDescription(),
+            ])
+            ->execute();
+    }
+
+    public function existsBySlug(string $slug): bool
+    {
+        return (bool) $this
+            ->connection
+            ->createQueryBuilder()
+            ->select(true)
+            ->from("realizations", "r")
+            ->where("r.slug = :slug")
+            ->setParameter('slug', $slug)
+            ->execute()
+            ->fetchOne();
+    }
+
+    public function updateMainImageId(string $realizationId, string $mainImageId): void
+    {
+        $this
+            ->connection
+            ->createQueryBuilder()
+            ->update("realizations", "r")
+            ->set("r.mainImageId", ":mainImageId")
+            ->where("r.id = :id")
+            ->setParameters([
+                'id'          => $realizationId,
+                'mainImageId' => $mainImageId,
             ])
             ->execute();
     }

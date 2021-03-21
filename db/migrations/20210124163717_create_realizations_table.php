@@ -12,7 +12,9 @@ final class CreateRealizationsTable extends AbstractMigration
         $table
             ->addColumn("id", "string")
             ->addColumn("userId", "string")
+            ->addColumn("mainImageId", "string", ['null' => true])
             ->addColumn("name", "string")
+            ->addColumn("slug", "string")
             ->addColumn("description", "string")
             ->addColumn("createdAt", "datetime", ["default" => "CURRENT_TIMESTAMP"])
             ->addColumn("updatedAt", "datetime", ["null" => true, "update" => "CURRENT_TIMESTAMP"])

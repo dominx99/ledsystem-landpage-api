@@ -9,8 +9,7 @@ final class CreateRealizationCommandHandler
 {
     public function __construct (
         private RealizationRepository $realizations,
-    )
-    {}
+    ) {}
 
     public function handle(CreateRealizationCommand $command): void
     {
@@ -18,6 +17,7 @@ final class CreateRealizationCommandHandler
             $command->id,
             $command->userId,
             $command->name,
+            $command->slug,
             $command->description,
         );
 

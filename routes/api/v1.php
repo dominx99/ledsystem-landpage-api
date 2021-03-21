@@ -9,6 +9,7 @@ $app->group('/api/v1', function (RouteCollectorProxyInterface $group) {
     $group->post('/auth/login', LoginAction::class);
 
     $group->group('', function (RouteCollectorProxyInterface $group) {
+        $group->get('/realizations', RealizationController::class . ':index');
         $group->post('/realizations', RealizationController::class . ':store');
     })->addMiddleware(new AuthorizationTokenMiddleware());
 });

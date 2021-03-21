@@ -8,13 +8,10 @@ final class Realization
         private string $id,
         private string $userId,
         private string $name,
+        private string $slug,
         private string $description,
-    ) {
-        $this->id = $id;
-        $this->userId = $userId;
-        $this->name = $name;
-        $this->description = $description;
-    }
+    )
+    {}
 
     public function getId(): string
     {
@@ -29,6 +26,11 @@ final class Realization
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
     }
 
     public function getDescription(): string

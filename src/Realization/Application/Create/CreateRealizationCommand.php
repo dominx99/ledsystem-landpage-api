@@ -8,7 +8,7 @@ final class CreateRealizationCommand
         public string $id,
         public string $userId,
         public string $name,
+        public string $slug,
         public string $description,
-    )
-    {}
+    ) {}
 }
