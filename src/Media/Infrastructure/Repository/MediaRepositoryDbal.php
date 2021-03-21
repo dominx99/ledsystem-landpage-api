@@ -24,10 +24,12 @@ final class MediaRepositoryDbal implements MediaRepository
             ->createQueryBuilder()
             ->insert("medias")
             ->values([
-                "id" => ":id",
+                "id"            => ":id",
+                "realizationId" => ":realizationId",
             ])
             ->setParameters([
-                "id" => $media->id,
+                "id"            => $media->id,
+                "realizationId" => $media->realizationId,
             ])
             ->execute();
     }

@@ -11,6 +11,7 @@ final class CreateMediasTable extends AbstractMigration
 
         $table
             ->addColumn("id", "string")
+            ->addColumn("realizationId", "string")
             ->addColumn("createdAt", "datetime", ["default" => "CURRENT_TIMESTAMP"])
             ->addColumn("updatedAt", "datetime", ["null" => true, "update" => "CURRENT_TIMESTAMP"])
             ->create();

@@ -51,6 +51,7 @@ final class RealizationController
 
         $realization = array_merge($realization, [
             'mainImage' => $this->fileRepository->findByMediaId($realization['mainImageId']),
+            'images' => $this->fileRepository->findByRealizationId($realization['id']),
         ]);
 
         return JsonResponse::create($realization);

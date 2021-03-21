@@ -52,7 +52,7 @@ final class CreateMediaFromUploadedFilesCommandHandler
 
         foreach($mediaIds as $mediaId) {
             // TODO: Refactor: Single insert should not be inside foreach
-            $this->mediaRepository->add(new Media($mediaId));
+            $this->mediaRepository->add(new Media($mediaId, $command->realizationId));
         }
 
         $this->multipleFileUploader->upload($files);

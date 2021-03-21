@@ -15,7 +15,7 @@ final class CreateRealizationsTable extends AbstractMigration
             ->addColumn("mainImageId", "string", ['null' => true])
             ->addColumn("name", "string")
             ->addColumn("slug", "string")
-            ->addColumn("description", "string")
+            ->addColumn("description", "text")
             ->addColumn("createdAt", "datetime", ["default" => "CURRENT_TIMESTAMP"])
             ->addColumn("updatedAt", "datetime", ["null" => true, "update" => "CURRENT_TIMESTAMP"])
             ->create();

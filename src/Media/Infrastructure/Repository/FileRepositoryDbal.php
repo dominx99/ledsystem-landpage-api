@@ -56,4 +56,18 @@ final class FileRepositoryDbal implements FileRepository
             ->execute()
             ->fetchAllAssociative();
     }
+
+    public function findByRealizationId(string $realizationId): array
+    {
+        return $this
+            ->connection
+            ->createQueryBuilder()
+            ->select("*")
+            ->from('files', 'f')
+            ->join('f', 'medias', 'm', 'f.mediaId = m.id')
+            ->where('m.realizationId = :realizationId')
+            ->setParameter('realizationId', $realizationId)
+            ->execute()
+            ->fetchAllAssociative();
+    }
 }
