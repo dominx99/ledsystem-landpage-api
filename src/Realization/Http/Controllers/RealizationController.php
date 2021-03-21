@@ -43,6 +43,19 @@ final class RealizationController
         );
     }
 
+    public function show(ServerRequestInterface $request): ResponseInterface
+    {
+        $slug = $request->getAttribute('slug');
+
+        $realization = $this->realizationRepository->findOneBySlug($slug);
+
+        $realization = array_merge($realization, [
+            'mainImage' => $this->fileRepository->findByMediaId($realization['mainImageId']),
+        ]);
+
+        return JsonResponse::create($realization);
+    }
+
     public function store(ServerRequestInterface $request): ResponseInterface
     {
         $body = $request->getParsedBody();

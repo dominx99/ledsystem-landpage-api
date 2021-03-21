@@ -26,6 +26,19 @@ final class RealizationRepositoryDbal implements RealizationRepository
             ->fetchAllAssociative();
     }
 
+    public function findOneBySlug(string $slug): array
+    {
+        return $this
+            ->connection
+            ->createQueryBuilder()
+            ->select("*")
+            ->from('realizations', 'r')
+            ->where('r.slug = :slug')
+            ->setParameter('slug', $slug)
+            ->execute()
+            ->fetchAssociative();
+    }
+
     public function add(Realization $realization): void
     {
         $this
