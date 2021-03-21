@@ -8,7 +8,14 @@ use App\Media\ValueObject\ImageCropPosition;
 
 final class RealizationThumbnailImageType implements ImageTypeInterface
 {
+    const TYPE = 'thumbnail';
+
     public ImageCropPosition $cropPosition;
+
+    public function getType(): string
+    {
+        return self::TYPE;
+    }
 
     public function __construct ()
     {

@@ -12,6 +12,7 @@ final class CreateFilesTable extends AbstractMigration
         $table
             ->addColumn("id", "string")
             ->addColumn("mediaId", "string")
+            ->addColumn("type", "string")
             ->addColumn("filename", "string")
             ->addColumn("path", "string")
             ->addColumn("fullPath", "string")

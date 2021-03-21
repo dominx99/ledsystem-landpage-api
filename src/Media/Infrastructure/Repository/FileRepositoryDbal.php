@@ -26,6 +26,7 @@ final class FileRepositoryDbal implements FileRepository
             ->values([
                 "id"       => ":id",
                 "mediaId"  => ":mediaId",
+                "type"     => ":type",
                 "filename" => ":filename",
                 "path"     => ":path",
                 "fullPath" => ":fullPath",
@@ -34,11 +35,25 @@ final class FileRepositoryDbal implements FileRepository
             ->setParameters([
                 "id"       => $file->id,
                 "mediaId"  => $file->mediaId,
+                "type"     => $file->type,
                 "filename" => $file->filename,
                 "path"     => $file->path,
                 "fullPath" => $file->fullPath,
                 "url"      => $file->url,
             ])
             ->execute();
+    }
+
+    public function findByMediaId(string $mediaId): array
+    {
+        return $this
+            ->connection
+            ->createQueryBuilder()
+            ->select("*")
+            ->from('files', 'f')
+            ->where('f.mediaId = :mediaId')
+            ->setParameter('mediaId', $mediaId)
+            ->execute()
+            ->fetchAllAssociative();
     }
 }

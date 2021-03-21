@@ -8,6 +8,7 @@ use App\Media\ValueObject\ImageCropPosition;
 
 interface ImageTypeInterface
 {
+    public function getType(): string;
     public function getSuffix(): string;
     public function getImageCropPosition(): ?ImageCropPosition;
 }

@@ -43,6 +43,7 @@ final class FileImageBuilder implements FileImageBuilderInterface
         return new File(
             (string) Uuid::uuid4(),
             $mediaId,
+            $type->getType(),
             $path,
             $filename,
             $this->buildFullPath($path, $filename),
@@ -54,7 +55,7 @@ final class FileImageBuilder implements FileImageBuilderInterface
     public function buildUrl(string $realizationId, string $filename): string
     {
         return
-            $this->baseUrl . '/storage/' .
+            $this->baseUrl . '/storage/realizations/' .
             $realizationId . '/' .
             $filename;
     }

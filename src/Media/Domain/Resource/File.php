@@ -11,6 +11,7 @@ final class File
     public function __construct(
         public string $id,
         public string $mediaId,
+        public string $type,
         public string $path,
         public string $filename,
         public string $fullPath,

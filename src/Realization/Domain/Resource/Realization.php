@@ -10,8 +10,7 @@ final class Realization
         private string $name,
         private string $slug,
         private string $description,
-    )
-    {}
+    ) {}
 
     public function getId(): string
     {

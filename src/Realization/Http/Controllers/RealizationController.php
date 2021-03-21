@@ -14,6 +14,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Ramsey\Uuid\Uuid;
 use Respect\Validation\Validator as v;
 use App\Media\Application\Create\CreateMediaFromUploadedFilesCommand;
+use App\Media\Domain\Repository\FileRepository;
 
 final class RealizationController
 {
@@ -22,20 +23,20 @@ final class RealizationController
         private Validator $validator,
         private RealizationRepository $realizationRepository,
         private CreateMediaFromUploadedFilesCommandHandler $createMediaFromUploadedFiles,
+        private FileRepository $fileRepository,
     ) {}
 
     public function index(): ResponseInterface
     {
         $realizations = $this->realizationRepository->findAll();
 
-        /* foreach ($realizations as $realization) { */
-        /*     $realization['mainImage'] = [ */
-        /*         'thumbnail' => $this->fileRepository->findOneBy([ */
-        /*             'mediaId' => $realization['mainImageId'], */
-        /*             'type'    => Media::THUMBNAIL, */
-        /*         ]), */
-        /*     ]; */
-        /* } */
+        $realizations = array_filter($realizations, fn($realization) => ! empty($realization['mainImageId']));
+
+        $realizations = array_map(function($realization) {
+            return array_merge($realization, [
+                'mainImage' => $this->fileRepository->findByMediaId($realization['mainImageId']),
+            ]);
+        }, $realizations);
 
         return JsonResponse::create(
             $realizations,
