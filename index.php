@@ -19,6 +19,18 @@ $app->addMiddleware(new ExceptionMiddleware($container->get(LoggerInterface::cla
 $app->addRoutingMiddleware();
 $app->addErrorMiddleware(true, false, false);
 
+$app->options('/{routes:.+}', function ($request, $response, $args) {
+    return $response;
+});
+
+$app->add(function ($request, $handler) {
+    $response = $handler->handle($request);
+    return $response
+            ->withHeader('Access-Control-Allow-Origin', 'https://ledsystem-landpage.herokuapp.com')
+            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+});
+
 require_once './routes/api/v1.php';
 
 $app->run();
