@@ -14,6 +14,7 @@ use App\Shared\Domain\Exception\BusinessException;
 use App\Shared\Domain\Validation\ValidationException;
 use App\Shared\Http\Responses\JsonResponse;
 use \Throwable;
+use Slim\Routing\RouteContext;
 
 final class ExceptionMiddleware implements MiddlewareInterface
 {
