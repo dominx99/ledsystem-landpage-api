@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-require_once './vendor/autoload.php';
+require_once './../vendor/autoload.php';
 
 use App\Shared\Http\Middleware\CorsMiddleware;
 use Slim\Factory\AppFactory;
@@ -11,7 +11,7 @@ use Slim\Exception\HttpNotFoundException;
 
 $container = new Container();
 
-require_once './bootstrap/dependencies.php';
+require_once './../bootstrap/dependencies.php';
 
 AppFactory::setContainer($container);
 $app = AppFactory::create();
@@ -22,7 +22,7 @@ $app->addMiddleware(new CorsMiddleware());
 $app->addRoutingMiddleware();
 $app->addErrorMiddleware(true, false, false);
 
-require_once './routes/api/v1.php';
+require_once './../routes/api/v1.php';
 
 $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {
     throw new HttpNotFoundException($request);
