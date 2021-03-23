@@ -38,6 +38,8 @@ final class RealizationController
             ]);
         }, $realizations);
 
+        $realizations = array_values($realizations);
+
         return JsonResponse::create(
             $realizations,
         );

@@ -17,9 +17,6 @@ final class MultipleFileUploader implements MultipleFileUploaderInterface
     public function upload(array $files): void
     {
         array_walk($files, function (File $file) {
-            $this->logger->debug($file->path);
-            $this->logger->debug($file->fullPath);
-
             if (! file_exists($file->path)) {
                 mkdir($file->path);
             }
