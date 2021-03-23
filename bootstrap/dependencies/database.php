@@ -3,7 +3,6 @@
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 
-
 if (getenv("APP_ENV") === "production") {
     $config = parse_url(getenv("DATABASE_URL"));
 

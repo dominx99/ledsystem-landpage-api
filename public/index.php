@@ -22,6 +22,10 @@ $app->addMiddleware(new CorsMiddleware());
 $app->addRoutingMiddleware();
 $app->addErrorMiddleware(true, false, false);
 
+$app->options('/{routes:.+}', function ($request, $response, $args) {
+    return $response;
+});
+
 require_once './../routes/api/v1.php';
 
 $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {

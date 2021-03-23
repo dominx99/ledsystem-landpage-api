@@ -18,8 +18,7 @@ final class LoginAction
     public function __construct(
         private Validator $validator,
         private UserRepository $userRepository,
-    )
-    {}
+    ) {}
 
     public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
