@@ -14,6 +14,7 @@ use App\Shared\Domain\Exception\BusinessException;
 use App\Shared\Domain\Validation\ValidationException;
 use App\Shared\Http\Responses\JsonResponse;
 use \Throwable;
+use Slim\Routing\RouteContext;
 
 final class ExceptionMiddleware implements MiddlewareInterface
 {
@@ -33,6 +34,16 @@ final class ExceptionMiddleware implements MiddlewareInterface
     {
         $response = new Response();
         $response = $response->withHeader('Content-Type', 'application/json');
+
+        $routeContext = RouteContext::fromRequest($request);
+        $routingResults = $routeContext->getRoutingResults();
+        $methods = $routingResults->getAllowedMethods();
+        $requestHeaders = $request->getHeaderLine('Access-Control-Request-Headers');
+
+        $response = $response->withHeader('Access-Control-Allow-Origin', env('FRONT_BASE_URL'));
+        $response = $response->withHeader('Access-Control-Allow-Methods', implode(',', $methods));
+        $response = $response->withHeader('Access-Control-Allow-Headers', $requestHeaders);
+        $response = $response->withHeader('Access-Control-Allow-Credentials', 'true');
 
         try {
             $response = $handler->handle($request);
