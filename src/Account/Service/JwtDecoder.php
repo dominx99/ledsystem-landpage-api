@@ -15,7 +15,7 @@ final class JwtDecoder extends JWT
         }
 
         return new DecodedToken(
-            (array) static::decode($token, getenv("JWT_KEY"), ["HS256"])
+            (array) static::decode($token, env("JWT_KEY"), ["HS256"])
         );
     }
 }

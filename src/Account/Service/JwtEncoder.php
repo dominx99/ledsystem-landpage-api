@@ -11,6 +11,6 @@ final class JwtEncoder extends JWT
     {
         return static::encode([
             'id' => $user->getId(),
-        ], getenv('JWT_KEY'));
+        ], env('JWT_KEY'));
     }
 }

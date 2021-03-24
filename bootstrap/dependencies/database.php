@@ -3,8 +3,8 @@
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 
-if (getenv("APP_ENV") === "production") {
-    $config = parse_url(getenv("DATABASE_URL"));
+if (env("APP_ENV") === "production") {
+    $config = parse_url(env("DATABASE_URL"));
 
     $config = [
         "host"     => $config['host'],
@@ -24,5 +24,5 @@ if (getenv("APP_ENV") === "production") {
 /** @var \DI\Container $container */
 
 $container->set(Connection::class, fn() => DriverManager::getConnection(array_merge($config, [
-    'driver' => getenv("DB_DRIVER"),
+    'driver' => env("DB_DRIVER"),
 ])));

@@ -2,6 +2,11 @@
 
 /** @var \DI\Container $container */
 
+if (! env('APP_ENV')) {
+    $dotenv= \Dotenv\Dotenv::createImmutable(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
+    $dotenv->load();
+}
+
 $container->set(
     \App\Shared\Domain\Validation\Validator::class,
     DI\autowire(\App\Shared\Infrastructure\Validation\RespectValidator::class),
@@ -14,7 +19,7 @@ $container->set(
 
 $container->set(
     'baseUrl',
-    getenv('APP_URL'),
+    env('APP_URL'),
 );
 
 $container->set(
