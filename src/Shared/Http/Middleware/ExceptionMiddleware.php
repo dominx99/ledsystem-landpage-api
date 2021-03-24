@@ -64,7 +64,7 @@ final class ExceptionMiddleware implements MiddlewareInterface
         } catch (Throwable $t) {
             $this->logException($t);
 
-            throw $t;
+            return $response;
         }
 
         return $response;
