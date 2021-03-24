@@ -18,7 +18,7 @@ final class MultipleFileUploader implements MultipleFileUploaderInterface
     {
         array_walk($files, function (File $file) {
             if (! file_exists($file->path)) {
-                /* mkdir($file->path); */
+                mkdir($file->path);
             }
 
             $file->storableFile->saveTo($file->fullPath);
