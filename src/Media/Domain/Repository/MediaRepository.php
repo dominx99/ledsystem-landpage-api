@@ -9,4 +9,5 @@ use App\Media\Domain\Resource\Media;
 interface MediaRepository
 {
     public function add(Media $media): void;
+    public function findByRealizationId(string $realizationId): array;
 }

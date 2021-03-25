@@ -33,4 +33,18 @@ final class MediaRepositoryDbal implements MediaRepository
             ])
             ->execute();
     }
+
+    public function findByRealizationId(string $realizationId): array
+    {
+        return $this
+            ->connection
+            ->createQueryBuilder()
+            ->select("*")
+            ->from('medias', 'm')
+            ->where('m.realizationId = :realizationId')
+            ->setParameter('realizationId', $realizationId)
+            ->execute()
+            ->fetchAllAssociative();
+    }
+
 }

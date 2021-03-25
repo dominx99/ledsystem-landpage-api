@@ -15,6 +15,10 @@ use Ramsey\Uuid\Uuid;
 use Respect\Validation\Validator as v;
 use App\Media\Application\Create\CreateMediaFromUploadedFilesCommand;
 use App\Media\Domain\Repository\FileRepository;
+use App\Media\Domain\Repository\MediaRepository;
+use App\Shared\Domain\Exception\BusinessException;
+use App\Shared\Domain\Exception\UnexpectedException;
+use Psr\Log\LoggerInterface;
 
 final class RealizationController
 {
@@ -24,6 +28,8 @@ final class RealizationController
         private RealizationRepository $realizationRepository,
         private CreateMediaFromUploadedFilesCommandHandler $createMediaFromUploadedFiles,
         private FileRepository $fileRepository,
+        private MediaRepository $mediaRepository,
+        private LoggerInterface $logger,
     ) {}
 
     public function index(): ResponseInterface
@@ -47,16 +53,27 @@ final class RealizationController
 
     public function show(ServerRequestInterface $request): ResponseInterface
     {
-        $slug = $request->getAttribute('slug');
+        try {
+            $slug = $request->getAttribute('slug');
 
-        $realization = $this->realizationRepository->findOneBySlug($slug);
+            $realization = $this->realizationRepository->findOneBySlug($slug);
 
-        $realization = array_merge($realization, [
-            'mainImage' => $this->fileRepository->findByMediaId($realization['mainImageId']),
-            'images' => $this->fileRepository->findByRealizationId($realization['id']),
-        ]);
+            $medias = $this->mediaRepository->findByRealizationId($realization['id']);
+            $images = array_map(function (array $media) {
+                return $this->fileRepository->findByMediaId($media['id']);
+            }, $medias);
 
-        return JsonResponse::create($realization);
+            $realization = array_merge($realization, [
+                'mainImage' => $this->fileRepository->findByMediaId($realization['mainImageId']),
+                'images' => $images,
+            ]);
+
+            return JsonResponse::create($realization);
+        } catch (BusinessException $e) {
+            throw $e;
+        } catch (\Throwable $t) {
+            throw new UnexpectedException($t);
+        }
     }
 
     public function store(ServerRequestInterface $request): ResponseInterface

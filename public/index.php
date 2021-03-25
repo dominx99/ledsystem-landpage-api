@@ -18,9 +18,9 @@ $app = AppFactory::create();
 
 $app->addBodyParsingMiddleware();
 $app->addMiddleware(new ExceptionMiddleware($container->get(LoggerInterface::class)));
-$app->addMiddleware(new CorsMiddleware());
+$app->addMiddleware(new CorsMiddleware($container->get(LoggerInterface::class)));
 $app->addRoutingMiddleware();
-$app->addErrorMiddleware(true, false, false);
+$app->addErrorMiddleware(true, true, true);
 
 $app->options('/{routes:.+}', function ($request, $response, $args) {
     return $response;
