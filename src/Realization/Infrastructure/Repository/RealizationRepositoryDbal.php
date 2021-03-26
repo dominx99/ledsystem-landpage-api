@@ -5,6 +5,7 @@ namespace App\Realization\Infrastructure\Repository;
 use App\Realization\Domain\Repository\RealizationRepository;
 use App\Realization\Domain\Resource\Realization;
 use Doctrine\DBAL\Connection;
+use App\Realization\Domain\Exception\RealizationNotFoundException;
 
 final class RealizationRepositoryDbal implements RealizationRepository
 {
@@ -24,6 +25,25 @@ final class RealizationRepositoryDbal implements RealizationRepository
             ->from('realizations', 'r')
             ->execute()
             ->fetchAllAssociative();
+    }
+
+    public function find(string $id): array
+    {
+        $realization = $this
+            ->connection
+            ->createQueryBuilder()
+            ->select("*")
+            ->from('realizations', 'r')
+            ->where('r.id = :id')
+            ->setParameter('id', $id)
+            ->execute()
+            ->fetchAssociative();
+
+        if (! $realization) {
+            throw new RealizationNotFoundException();
+        }
+
+        return $realization;
     }
 
     public function findOneBySlug(string $slug): array
@@ -52,6 +72,27 @@ final class RealizationRepositoryDbal implements RealizationRepository
                 "slug"        => ":slug",
                 "description" => ":description",
             ])
+            ->setParameters([
+                "id"          => $realization->getId(),
+                "userId"      => $realization->getUserId(),
+                "name"        => $realization->getName(),
+                "slug"        => $realization->getSlug(),
+                "description" => $realization->getDescription(),
+            ])
+            ->execute();
+    }
+
+    public function update(Realization $realization): void
+    {
+        $this
+            ->connection
+            ->createQueryBuilder()
+            ->update('realizations', 'r')
+            ->set('r.userId', ':userId')
+            ->set('r.name', ':name')
+            ->set('r.slug', ':slug')
+            ->set('r.description', ':description')
+            ->where('id = :id')
             ->setParameters([
                 "id"          => $realization->getId(),
                 "userId"      => $realization->getUserId(),

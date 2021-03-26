@@ -19,11 +19,15 @@ use App\Media\Domain\Repository\MediaRepository;
 use App\Shared\Domain\Exception\BusinessException;
 use App\Shared\Domain\Exception\UnexpectedException;
 use Psr\Log\LoggerInterface;
+use App\Realization\Application\Update\UpdateRealizationMainImageCommand;
+use App\Realization\Application\Update\UpdateRealizationCommand;
+use App\Realization\Application\Update\UpdateRealizationCommandHandler;
 
 final class RealizationController
 {
     public function __construct (
         private CreateRealizationCommandHandler $createRealization,
+        private UpdateRealizationCommandHandler $updateRealization,
         private Validator $validator,
         private RealizationRepository $realizationRepository,
         private CreateMediaFromUploadedFilesCommandHandler $createMediaFromUploadedFiles,
@@ -76,6 +80,53 @@ final class RealizationController
         }
     }
 
+    public function update(ServerRequestInterface $request): ResponseInterface
+    {
+        $body = $request->getParsedBody() ?? [];
+        $files = $request->getUploadedFiles() ?? [];
+
+        $this->validator->validate($body, [
+            'id'          => v::notEmpty(),
+            'name'        => v::notEmpty(),
+            'slug'        => v::notEmpty(),
+            'description' => v::notEmpty(),
+        ]);
+
+        $realization = $this->realizationRepository->find($body['id']);
+
+        if (
+            $this->realizationRepository->existsBySlug($body['slug']) &&
+            $realization['slug'] !== $body['slug']
+        ) {
+            throw ValidationException::withMessages([
+                'slug' => [
+                    "Realizacja z podanym slug'iem już istnieje",
+                ],
+            ]);
+        }
+
+        $realizationId = $realization['id'];
+
+        $this->updateRealization->handle(new UpdateRealizationCommand(
+            $realizationId,
+            $request->getAttribute('decodedToken')->id(),
+            $body['name'],
+            $body['slug'],
+            $body['description'],
+        ));
+
+        if (! isset($files['images'])) {
+            return JsonResponse::create(['status' => 'success']);
+        }
+
+        $this->createMediaFromUploadedFiles->handle(new CreateMediaFromUploadedFilesCommand(
+            $realizationId,
+            $files['images'],
+        ));
+
+        return JsonResponse::create(['status' => 'success']);
+    }
+
     public function store(ServerRequestInterface $request): ResponseInterface
     {
         $body = $request->getParsedBody();
@@ -113,6 +164,15 @@ final class RealizationController
             $realizationId,
             $files['images'],
         ));
+
+        $medias = $this->mediaRepository->findByRealizationId($realizationId);
+
+        if (count ($medias) > 0) {
+            $this->updateRealizationMainImage->handle(new UpdateRealizationMainImageCommand(
+                $realizationId,
+                $medias[0]['id'],
+            ));
+        }
 
         return JsonResponse::create(['status' => 'success']);
     }

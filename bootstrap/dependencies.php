@@ -37,6 +37,12 @@ $container->set(
     DI\autowire(\App\Media\Infrastructure\Builder\FileImageBuilder::class),
 );
 
+$container->set(
+    \App\Realization\Domain\Hydrator\RealizationHydratorInterface::class,
+    DI\autowire(\App\Realization\Infrastructure\Hydrator\RealizationHydrator::class),
+);
+
+
 require_once "dependencies/database.php";
 require_once "dependencies/logger.php";
 require_once "dependencies/repository.php";

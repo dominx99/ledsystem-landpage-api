@@ -56,9 +56,5 @@ final class CreateMediaFromUploadedFilesCommandHandler
         }
 
         $this->multipleFileUploader->upload($files);
-
-        if (count($mediaIds) > 0) {
-            $this->realizationRepository->updateMainImageId($command->realizationId, $mediaIds[0]);
-        }
     }
 }
