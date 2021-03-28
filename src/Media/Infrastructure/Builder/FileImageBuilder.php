@@ -35,7 +35,7 @@ final class FileImageBuilder implements FileImageBuilderInterface
         $path = $this->buildPath($realizationId);
 
         $image = new Imagick($uploadedFile->getFilePath());
-        $image->setImageFormat("webp");
+        $image->setImageFormat("jpeg");
         $image->compositeImage($image, Imagick::COMPOSITE_OVER, 0, 0);
         $image->setImageCompression(Imagick::COMPRESSION_JPEG);
         $image->setImageCompressionQuality(50);
