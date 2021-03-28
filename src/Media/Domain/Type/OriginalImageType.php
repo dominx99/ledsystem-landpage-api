@@ -10,6 +10,13 @@ final class OriginalImageType implements ImageTypeInterface
 {
     const TYPE = 'original';
 
+    private ImageCropPosition $cropPosition;
+
+    public function __construct ()
+    {
+        $this->cropPosition = new ImageCropPosition(1920, 1080);
+    }
+
     public function getType(): string
     {
         return self::TYPE;
@@ -22,6 +29,6 @@ final class OriginalImageType implements ImageTypeInterface
 
     public function getImageCropPosition(): ?ImageCropPosition
     {
-        return null;
+        return $this->cropPosition;
     }
 }

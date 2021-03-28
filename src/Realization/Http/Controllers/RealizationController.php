@@ -22,6 +22,7 @@ use Psr\Log\LoggerInterface;
 use App\Realization\Application\Update\UpdateRealizationMainImageCommand;
 use App\Realization\Application\Update\UpdateRealizationCommand;
 use App\Realization\Application\Update\UpdateRealizationCommandHandler;
+use App\Realization\Application\Update\UpdateRealizationMainImageCommandHandler;
 
 final class RealizationController
 {
@@ -34,6 +35,7 @@ final class RealizationController
         private FileRepository $fileRepository,
         private MediaRepository $mediaRepository,
         private LoggerInterface $logger,
+        private UpdateRealizationMainImageCommandHandler $updateRealizationMainImage,
     ) {}
 
     public function index(): ResponseInterface
@@ -119,10 +121,14 @@ final class RealizationController
             return JsonResponse::create(['status' => 'success']);
         }
 
-        $this->createMediaFromUploadedFiles->handle(new CreateMediaFromUploadedFilesCommand(
-            $realizationId,
-            $files['images'],
-        ));
+        try {
+            $this->createMediaFromUploadedFiles->handle(new CreateMediaFromUploadedFilesCommand(
+                $realizationId,
+                $files['images'],
+            ));
+        } catch (\Throwable $t) {
+            throw new UnexpectedException($t);
+        }
 
         return JsonResponse::create(['status' => 'success']);
     }

@@ -7,11 +7,11 @@ namespace App\Media\Infrastructure\Builder;
 use Slim\Psr7\UploadedFile;
 use Psr\Container\ContainerInterface;
 use App\Media\Domain\Resource\File;
-use Gumlet\ImageResize;
 use App\Media\Domain\Builder\FileImageBuilderInterface;
 use App\Media\Domain\Type\ImageTypeInterface;
-use App\Media\ValueObject\StorableResizedImage;
 use Ramsey\Uuid\Uuid;
+use App\Media\ValueObject\StorableImagick;
+use Imagick;
 
 final class FileImageBuilder implements FileImageBuilderInterface
 {
@@ -20,8 +20,7 @@ final class FileImageBuilder implements FileImageBuilderInterface
 
     public function __construct (
         private ContainerInterface $container,
-    )
-    {
+    ) {
         $this->realizationsDirectory = $container->get('realizationsDirectory');
         $this->baseUrl = $container->get('baseUrl');
     }
@@ -35,10 +34,27 @@ final class FileImageBuilder implements FileImageBuilderInterface
         $filename = $this->buildFilename($uploadedFile, $type->getSuffix());
         $path = $this->buildPath($realizationId);
 
-        $image = new ImageResize($uploadedFile->getFilePath());
-        if ($cropPosition = $type->getImageCropPosition()) {
-            $image->crop($cropPosition->width, $cropPosition->height);
-        };
+        $image = new Imagick($uploadedFile->getFilePath());
+        $image->setImageFormat("webp");
+        $image->compositeImage($image, Imagick::COMPOSITE_OVER, 0, 0);
+        $image->setImageCompression(Imagick::COMPRESSION_JPEG);
+        $image->setImageCompressionQuality(50);
+
+        if (
+            ($cropPosition = $type->getImageCropPosition()) &&
+            (
+                $image->getImageWidth() > $cropPosition->width &&
+                $image->getImageHeight() > $cropPosition->height
+            )
+        ) {
+            $image->scaleImage(
+                $cropPosition->width,
+                $cropPosition->height,
+                true,
+            );
+        }
+
+        $storableFile = new StorableImagick($image);
 
         return new File(
             (string) Uuid::uuid4(),
@@ -48,7 +64,7 @@ final class FileImageBuilder implements FileImageBuilderInterface
             $filename,
             $this->buildFullPath($path, $filename),
             $this->buildUrl($realizationId, $filename),
-            new StorableResizedImage($image),
+            $storableFile,
         );
     }
 
