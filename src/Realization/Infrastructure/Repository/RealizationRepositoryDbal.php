@@ -130,4 +130,15 @@ final class RealizationRepositoryDbal implements RealizationRepository
             ])
             ->execute();
     }
+
+    public function remove(string $realizationId): void
+    {
+        $this
+            ->connection
+            ->createQueryBuilder()
+            ->delete("realizations")
+            ->where("realizations.id = :realizationId")
+            ->setParameter("realizationId", $realizationId)
+            ->execute();
+    }
 }

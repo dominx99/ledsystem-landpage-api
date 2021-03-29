@@ -18,11 +18,12 @@ use App\Media\Domain\Repository\FileRepository;
 use App\Media\Domain\Repository\MediaRepository;
 use App\Shared\Domain\Exception\BusinessException;
 use App\Shared\Domain\Exception\UnexpectedException;
-use Psr\Log\LoggerInterface;
 use App\Realization\Application\Update\UpdateRealizationMainImageCommand;
 use App\Realization\Application\Update\UpdateRealizationCommand;
 use App\Realization\Application\Update\UpdateRealizationCommandHandler;
 use App\Realization\Application\Update\UpdateRealizationMainImageCommandHandler;
+use App\Realization\Application\Remove\RemoveRealizationCommand;
+use App\Realization\Application\Remove\RemoveRealizationCommandHandler;
 
 final class RealizationController
 {
@@ -34,8 +35,8 @@ final class RealizationController
         private CreateMediaFromUploadedFilesCommandHandler $createMediaFromUploadedFiles,
         private FileRepository $fileRepository,
         private MediaRepository $mediaRepository,
-        private LoggerInterface $logger,
         private UpdateRealizationMainImageCommandHandler $updateRealizationMainImage,
+        private RemoveRealizationCommandHandler $removeRealization,
     ) {}
 
     public function index(): ResponseInterface
@@ -179,6 +180,15 @@ final class RealizationController
                 $medias[0]['id'],
             ));
         }
+
+        return JsonResponse::create(['status' => 'success']);
+    }
+
+    public function remove(ServerRequestInterface $request): ResponseInterface
+    {
+        $this->removeRealization->handle(new RemoveRealizationCommand(
+            $request->getAttribute('realizationId'),
+        ));
 
         return JsonResponse::create(['status' => 'success']);
     }

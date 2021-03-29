@@ -13,4 +13,5 @@ interface RealizationRepository
     public function update(Realization $realization): void;
     public function existsBySlug(string $slug): bool;
     public function updateMainImageId(string $realizationId, string $mainImageId): void;
+    public function remove(string $realizationId): void;
 }

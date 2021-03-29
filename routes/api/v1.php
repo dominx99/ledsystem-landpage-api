@@ -19,6 +19,7 @@ $app->group('/api/v1', function (RouteCollectorProxyInterface $group) {
         $group->post('/realizations/edit', RealizationController::class . ':update');
         $group->get('/realizations/{realizationId}/images', RealizationImageController::class . ':index');
         $group->get('/realizations/{realizationId}/main-image', RealizationImageController::class . ':mainImage');
+        $group->post('/realizations/{realizationId}/remove', RealizationController::class . ':remove');
         $group->post('/realizations/{realizationId}/set-main-image', SetRealizationMainImageAction::class);
         $group->post('/medias/{mediaId}/remove', MediaController::class . ':remove');
     })->addMiddleware(new AuthorizationTokenMiddleware());
