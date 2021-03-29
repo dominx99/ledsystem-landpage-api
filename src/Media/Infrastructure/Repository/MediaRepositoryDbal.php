@@ -10,12 +10,9 @@ use App\Media\Domain\Resource\Media;
 
 final class MediaRepositoryDbal implements MediaRepository
 {
-    private Connection $connection;
-
-    public function __construct(Connection $connection)
-    {
-        $this->connection = $connection;
-    }
+    public function __construct(
+        private Connection $connection,
+    ) {}
 
     public function add(Media $media): void
     {
@@ -52,8 +49,8 @@ final class MediaRepositoryDbal implements MediaRepository
         $this
             ->connection
             ->createQueryBuilder()
-            ->delete("medias", "m")
-            ->where("m.id = :mediaId")
+            ->delete("medias")
+            ->where("medias.id = :mediaId")
             ->setParameter("mediaId", $mediaId)
             ->execute();
     }
