@@ -10,4 +10,5 @@ interface MediaRepository
 {
     public function add(Media $media): void;
     public function findByRealizationId(string $realizationId): array;
+    public function remove(string $mediaId): void;
 }

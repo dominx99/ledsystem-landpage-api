@@ -11,4 +11,5 @@ interface FileRepository
     public function add(File $file): void;
     public function findByMediaId(string $mediaId): array;
     public function findByRealizationId(string $realizationId): array;
+    public function removeByMediaId(string $mediaId): void;
 }

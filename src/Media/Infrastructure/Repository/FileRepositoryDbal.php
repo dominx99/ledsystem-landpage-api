@@ -70,4 +70,15 @@ final class FileRepositoryDbal implements FileRepository
             ->execute()
             ->fetchAllAssociative();
     }
+
+    public function removeByMediaId(string $mediaId): void
+    {
+        $this
+            ->connection
+            ->createQueryBuilder()
+            ->delete("files", "f")
+            ->where("f.mediaId = :mediaId")
+            ->setParameter("mediaId", $mediaId)
+            ->execute();
+    }
 }

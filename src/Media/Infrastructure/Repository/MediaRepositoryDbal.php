@@ -47,4 +47,14 @@ final class MediaRepositoryDbal implements MediaRepository
             ->fetchAllAssociative();
     }
 
+    public function remove(string $mediaId): void
+    {
+        $this
+            ->connection
+            ->createQueryBuilder()
+            ->delete("medias", "m")
+            ->where("m.id = :mediaId")
+            ->setParameter("mediaId", $mediaId)
+            ->execute();
+    }
 }

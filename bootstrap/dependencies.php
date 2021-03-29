@@ -42,6 +42,10 @@ $container->set(
     DI\autowire(\App\Realization\Infrastructure\Hydrator\RealizationHydrator::class),
 );
 
+$container->set(
+    \App\Media\Domain\Remover\FileRemoverInterface::class,
+    DI\autowire(\App\Media\Infrastructure\Remover\FileRemover::class),
+);
 
 require_once "dependencies/database.php";
 require_once "dependencies/logger.php";
