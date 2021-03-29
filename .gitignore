@@ -1,6 +1,8 @@
 vendor/
 logs/
 storage/
+public/storage/
+public/storage
 
 .env
 .env.nazwa
