@@ -33,6 +33,19 @@ final class MediaRepositoryDbal implements MediaRepository
             ->execute();
     }
 
+    public function find(string $mediaId): array
+    {
+        return $this
+            ->connection
+            ->createQueryBuilder()
+            ->select("*")
+            ->from('medias', 'm')
+            ->where('m.id = :mediaId')
+            ->setParameter('mediaId', $mediaId)
+            ->execute()
+            ->fetchAssociative();
+    }
+
     public function findByRealizationId(string $realizationId): array
     {
         return $this
@@ -55,6 +68,21 @@ final class MediaRepositoryDbal implements MediaRepository
             ->delete("medias")
             ->where("medias.id = :mediaId")
             ->setParameter("mediaId", $mediaId)
+            ->execute();
+    }
+
+    public function updateOrder(string $mediaId, int $order): void
+    {
+        $this
+            ->connection
+            ->createQueryBuilder()
+            ->update("medias", "m")
+            ->set("m.order", ":order")
+            ->where("m.id = :id")
+            ->setParameters([
+                'id'    => $mediaId,
+                'order' => $order,
+            ])
             ->execute();
     }
 }

@@ -7,6 +7,7 @@ use App\Realization\Http\Controllers\RealizationController;
 use Slim\Interfaces\RouteCollectorProxyInterface;
 use App\Realization\Http\Controllers\RealizationImageController;
 use App\Realization\Http\Controllers\SetRealizationMainImageAction;
+use App\Media\Http\Action\UpdateMediaOrderAction;
 
 $app->group('/api/v1', function (RouteCollectorProxyInterface $group) {
     $group->post('/auth/login', LoginAction::class);
@@ -22,5 +23,6 @@ $app->group('/api/v1', function (RouteCollectorProxyInterface $group) {
         $group->post('/realizations/{realizationId}/remove', RealizationController::class . ':remove');
         $group->post('/realizations/{realizationId}/set-main-image', SetRealizationMainImageAction::class);
         $group->post('/medias/{mediaId}/remove', MediaController::class . ':remove');
+        $group->post('/medias/update-order', UpdateMediaOrderAction::class);
     })->addMiddleware(new AuthorizationTokenMiddleware());
 });

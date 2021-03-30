@@ -23,11 +23,13 @@ final class RealizationImageController
             $request->getAttribute('realizationId'),
         );
 
-        $images = array_map(function (array $media) {
-            return $this->fileRepository->findByMediaId($media['id']);
+        $medias = array_map(function (array $media) {
+            return array_merge($media, [
+                'images' => $this->fileRepository->findByMediaId($media['id']),
+            ]);
         }, $medias);
 
-        return JsonResponse::create($images);
+        return JsonResponse::create($medias);
     }
 
     public function mainImage(ServerRequestInterface $request): ResponseInterface
@@ -36,7 +38,9 @@ final class RealizationImageController
             $request->getAttribute('realizationId'),
         );
 
-        $mainImage = $this->fileRepository->findByMediaId($realization['mainImageId']);
+        $mainImage = array_merge($this->mediaRepository->find($realization['mainImageId']), [
+            'images' => $this->fileRepository->findByMediaId($realization['mainImageId']),
+        ]);
 
         return JsonResponse::create($mainImage);
     }

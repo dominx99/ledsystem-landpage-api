@@ -47,7 +47,9 @@ final class RealizationController
 
         $realizations = array_map(function($realization) {
             return array_merge($realization, [
-                'mainImage' => $this->fileRepository->findByMediaId($realization['mainImageId']),
+                'mainImage' => array_merge($this->mediaRepository->find($realization['mainImageId']), [
+                    'images' => $this->fileRepository->findByMediaId($realization['mainImageId']),
+                ]),
             ]);
         }, $realizations);
 
@@ -66,13 +68,17 @@ final class RealizationController
             $realization = $this->realizationRepository->findOneBySlug($slug);
 
             $medias = $this->mediaRepository->findByRealizationId($realization['id']);
-            $images = array_map(function (array $media) {
-                return $this->fileRepository->findByMediaId($media['id']);
+            $medias = array_map(function (array $media) {
+                return array_merge($media, [
+                    'images' => $this->fileRepository->findByMediaId($media['id']),
+                ]);
             }, $medias);
 
             $realization = array_merge($realization, [
-                'mainImage' => $this->fileRepository->findByMediaId($realization['mainImageId']),
-                'images' => $images,
+                'mainImage' => array_merge($this->mediaRepository->find($realization['mainImageId']), [
+                    'images' => $this->fileRepository->findByMediaId($realization['mainImageId']),
+                ]),
+                'medias'    => $medias,
             ]);
 
             return JsonResponse::create($realization);
