@@ -23,10 +23,12 @@ final class MediaRepositoryDbal implements MediaRepository
             ->values([
                 "id"            => ":id",
                 "realizationId" => ":realizationId",
+                "`order`"       => ":order",
             ])
             ->setParameters([
                 "id"            => $media->id,
                 "realizationId" => $media->realizationId,
+                "order"         => $media->order,
             ])
             ->execute();
     }
@@ -40,6 +42,7 @@ final class MediaRepositoryDbal implements MediaRepository
             ->from('medias', 'm')
             ->where('m.realizationId = :realizationId')
             ->setParameter('realizationId', $realizationId)
+            ->orderBy('`order`')
             ->execute()
             ->fetchAllAssociative();
     }
