@@ -61,9 +61,8 @@ final class ContactSendEmailAction
             $mail->send();
 
             return JsonResponse::create(['status' => 'success']);
-        } catch (Exception) {
-            return JsonResponse::create(['status' => 'fail']);
-            throw new BusinessException('Could not send email');
+        } catch (Exception $e) {
+            throw new BusinessException($e->getMessage());
         }
     }
 }
