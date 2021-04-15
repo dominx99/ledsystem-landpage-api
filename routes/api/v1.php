@@ -8,6 +8,7 @@ use Slim\Interfaces\RouteCollectorProxyInterface;
 use App\Realization\Http\Controllers\RealizationImageController;
 use App\Realization\Http\Controllers\SetRealizationMainImageAction;
 use App\Media\Http\Action\UpdateMediaOrderAction;
+use App\Account\Http\Actions\ContactSendEmailAction;
 
 $app->group('/api/v1', function (RouteCollectorProxyInterface $group) {
     $group->post('/auth/login', LoginAction::class);
@@ -25,4 +26,6 @@ $app->group('/api/v1', function (RouteCollectorProxyInterface $group) {
         $group->post('/medias/{mediaId}/remove', MediaController::class . ':remove');
         $group->post('/medias/update-order', UpdateMediaOrderAction::class);
     })->addMiddleware(new AuthorizationTokenMiddleware());
+
+    $group->post('/contact/send-email', ContactSendEmailAction::class);
 });

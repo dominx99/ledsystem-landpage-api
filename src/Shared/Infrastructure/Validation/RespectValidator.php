@@ -5,6 +5,7 @@ namespace App\Shared\Infrastructure\Validation;
 use Respect\Validation\Exceptions\NestedValidationException;
 use App\Shared\Domain\Validation\Validator;
 use App\Shared\Domain\Validation\ValidationException;
+use Psr\Log\LoggerInterface;
 
 final class RespectValidator implements Validator
 {
