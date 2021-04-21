@@ -14,3 +14,8 @@ com:
 
 phinx:
 	@docker-compose -f $(compose_file) exec $(php_service) composer phinx $(CMD)
+
+dbrestart:
+	@docker-compose -f $(compose_file) exec $(php_service) composer phinx rollback -- -t 0
+	@docker-compose -f $(compose_file) exec $(php_service) composer phinx migrate
+	@docker-compose -f $(compose_file) exec $(php_service) composer phinx seed:run

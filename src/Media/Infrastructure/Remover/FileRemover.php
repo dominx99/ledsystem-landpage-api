@@ -10,6 +10,12 @@ final class FileRemover implements FileRemoverInterface
 {
     public function remove(string $path): void
     {
+        if (is_dir($path)) {
+            rmdir($path);
+
+            return;
+        }
+
         unlink($path);
     }
 }

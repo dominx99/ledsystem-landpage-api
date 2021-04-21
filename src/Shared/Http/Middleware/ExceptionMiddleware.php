@@ -14,7 +14,7 @@ use App\Shared\Domain\Exception\BusinessException;
 use App\Shared\Domain\Exception\UnexpectedException;
 use App\Shared\Domain\Validation\ValidationException;
 use App\Shared\Http\Responses\JsonResponse;
-use \Throwable;
+use Throwable;
 
 final class ExceptionMiddleware implements MiddlewareInterface
 {
