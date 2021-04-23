@@ -9,11 +9,14 @@ use App\Realization\Http\Controllers\RealizationImageController;
 use App\Realization\Http\Controllers\SetRealizationMainImageAction;
 use App\Media\Http\Action\UpdateMediaOrderAction;
 use App\Account\Http\Actions\ContactSendEmailAction;
+use App\Realization\Http\Actions\ChangeRealizationVisibilityOnMainPageAction;
+use App\Realization\Http\Actions\GetRealizationsVisibleOnMainPageAction;
 
 $app->group('/api/v1', function (RouteCollectorProxyInterface $group) {
     $group->post('/auth/login', LoginAction::class);
 
     $group->get('/realizations', RealizationController::class . ':index');
+    $group->get('/realizations/visible-on-main-page', GetRealizationsVisibleOnMainPageAction::class);
     $group->get('/realizations/{slug}', RealizationController::class . ':show');
 
     $group->group('', function (RouteCollectorProxyInterface $group) {
@@ -23,6 +26,10 @@ $app->group('/api/v1', function (RouteCollectorProxyInterface $group) {
         $group->get('/realizations/{realizationId}/main-image', RealizationImageController::class . ':mainImage');
         $group->post('/realizations/{realizationId}/remove', RealizationController::class . ':remove');
         $group->post('/realizations/{realizationId}/set-main-image', SetRealizationMainImageAction::class);
+        $group->post(
+            '/realizations/{realizationId}/update-visible-on-main-page',
+            ChangeRealizationVisibilityOnMainPageAction::class
+        );
         $group->post('/medias/{mediaId}/remove', MediaController::class . ':remove');
         $group->post('/medias/update-order', UpdateMediaOrderAction::class);
     })->addMiddleware(new AuthorizationTokenMiddleware());

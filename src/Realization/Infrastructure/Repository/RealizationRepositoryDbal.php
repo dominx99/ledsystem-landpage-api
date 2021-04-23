@@ -27,6 +27,18 @@ final class RealizationRepositoryDbal implements RealizationRepository
             ->fetchAllAssociative();
     }
 
+    public function findAllVisibleOnMainPage(): array
+    {
+        return $this
+            ->connection
+            ->createQueryBuilder()
+            ->select("*")
+            ->from('realizations', 'r')
+            ->where('r.visibleOnMainPage = 1')
+            ->execute()
+            ->fetchAllAssociative();
+    }
+
     public function find(string $id): array
     {
         $realization = $this
@@ -92,13 +104,15 @@ final class RealizationRepositoryDbal implements RealizationRepository
             ->set('r.name', ':name')
             ->set('r.slug', ':slug')
             ->set('r.description', ':description')
+            ->set('r.visibleOnMainPage', ':visibleOnMainPage')
             ->where('id = :id')
             ->setParameters([
-                "id"          => $realization->getId(),
-                "userId"      => $realization->getUserId(),
-                "name"        => $realization->getName(),
-                "slug"        => $realization->getSlug(),
-                "description" => $realization->getDescription(),
+                "id"                => $realization->getId(),
+                "userId"            => $realization->getUserId(),
+                "name"              => $realization->getName(),
+                "slug"              => $realization->getSlug(),
+                "description"       => $realization->getDescription(),
+                "visibleOnMainPage" => $realization->getVisibleOnMainPage() ? 1 : 0,
             ])
             ->execute();
     }

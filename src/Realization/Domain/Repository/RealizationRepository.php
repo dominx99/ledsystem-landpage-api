@@ -7,6 +7,7 @@ use App\Realization\Domain\Resource\Realization;
 interface RealizationRepository
 {
     public function findAll(): array;
+    public function findAllVisibleOnMainPage(): array;
     public function find(string $id): array;
     public function findOneBySlug(string $slug): array;
     public function add(Realization $realization): void;

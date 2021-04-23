@@ -17,6 +17,7 @@ final class RealizationHydrator implements RealizationHydratorInterface
             $data['name'],
             $data['slug'],
             $data['description'],
+            (bool) $data['visibleOnMainPage'] ?? false,
         );
     }
 }

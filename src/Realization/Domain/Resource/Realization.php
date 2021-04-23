@@ -10,7 +10,13 @@ final class Realization
         private string $name,
         private string $slug,
         private string $description,
+        private ?bool $visibleOnMainPage = false,
     ) {}
+
+    public function setVisibleOnMainPage(bool $visibleOnMainPage): void
+    {
+        $this->visibleOnMainPage = $visibleOnMainPage;
+    }
 
     public function getId(): string
     {
@@ -35,5 +41,10 @@ final class Realization
     public function getDescription(): string
     {
         return $this->description;
+    }
+
+    public function getVisibleOnMainPage(): bool
+    {
+        return $this->visibleOnMainPage;
     }
 }
