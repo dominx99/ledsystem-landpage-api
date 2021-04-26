@@ -76,8 +76,8 @@ final class FileRepositoryDbal implements FileRepository
         $this
             ->connection
             ->createQueryBuilder()
-            ->delete("files", "f")
-            ->where("f.mediaId = :mediaId")
+            ->delete("files")
+            ->where("mediaId = :mediaId")
             ->setParameter("mediaId", $mediaId)
             ->execute();
     }
